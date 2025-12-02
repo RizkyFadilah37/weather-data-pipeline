@@ -1,0 +1,12 @@
+services:
+  db:
+    container_name: weather_postgres_db
+    image: bitnami/postgresql:16.1.0-debian-11-r15
+    ports:
+      - "3000:5432"
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: db_weather
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
