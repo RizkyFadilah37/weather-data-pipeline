@@ -1,6 +1,5 @@
 from api_request import mock_get_api
 import psycopg2
-<<<<<<< HEAD
 from dotenv import load_dotenv
 import os
 
@@ -8,21 +7,14 @@ load_dotenv()
 db_pass = os.getenv("db_pass")
 db_user = os.getenv("db_user")
 db = os.getenv("db")
-=======
->>>>>>> 5a74b4af78ccf9db13717d022b35fd4f66136cf1
+
 
 def connect_to_db():
     print("trying connect into PostgreSQL...")
     try:
-<<<<<<< HEAD
         conn = psycopg2.connect(dbname=db, 
                                     user=db_user,
                                     password=db_pass,
-=======
-        conn = psycopg2.connect(dbname="db_weather", 
-                                    user='db_user',
-                                    password='db_password',
->>>>>>> 5a74b4af78ccf9db13717d022b35fd4f66136cf1
                                     host="localhost", 
                                     port=3000)
         return conn
