@@ -76,7 +76,19 @@ def insert_data(conn,data):
         print(f"Error inserting data into database {e}")
         raise
 
-conn = connect_to_db()
-data = mock_get_api()
-create_table(conn)
-insert_data(conn,data) 
+def main():
+    try:
+        conn = connect_to_db()
+        data = mock_get_api()
+        create_table(conn)
+        insert_data(conn,data) 
+    except Exception as e:
+        print(f"cannot insert the data : {e}")
+        raise
+    finally:
+        if 'conn' is locals():
+            conn.Close()
+            print("database connection is closed")
+
+# Debugging
+# main()

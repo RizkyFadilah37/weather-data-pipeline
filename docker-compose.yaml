@@ -1,18 +1,35 @@
 services:
   db:
     container_name: weather_postgres_db
-    image: bitnami/postgresql:16.1.0-debian-11-r15
+    image: postgres:14.17
     ports:
-      - "3000:5432"
+      - 3000:5432
     environment:
-<<<<<<< HEAD
       POSTGRES_USER: ${db_user}
       POSTGRES_PASSWORD: ${db_pass}
       POSTGRES_DB: ${db}
-=======
-      POSTGRES_USER: db_user
-      POSTGRES_PASSWORD: db_password
-      POSTGRES_DB: db_weather
->>>>>>> 5a74b4af78ccf9db13717d022b35fd4f66136cf1
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/airflow_init.sql:/docker-entrypoint-initdb.d/airflow_init.sql
+    networks:
+      - my_network
+  
+  af:
+    container_name: airflow_conn
+    image: apache/airflow:3.0.0
+    ports:
+      - 8000:8080
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@db:5432/airflow_db
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+    depends_on:
+      - db
+    networks:
+      - my_network
+    command: >
+      bash -c "airflow db migrate && airflow standalone"
+
+networks:
+  my_network:
+    driver: bridge
