@@ -86,9 +86,9 @@ def main():
         print(f"cannot insert the data : {e}")
         raise
     finally:
-        if 'conn' is locals():
-            conn.Close()
+        if 'conn' in locals():
+            conn.close()
             print("database connection is closed")
 
 # Debugging
-# main()
+main()
