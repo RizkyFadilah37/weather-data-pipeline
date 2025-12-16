@@ -7,6 +7,8 @@ load_dotenv()
 db_pass = os.getenv("db_pass")
 db_user = os.getenv("db_user")
 db = os.getenv("db")
+db_host = os.getenv("db_host", "localhost")
+db_port = os.getenv("db_port", "3000")
 
 
 def connect_to_db():
@@ -15,8 +17,8 @@ def connect_to_db():
         conn = psycopg2.connect(dbname=db, 
                                     user=db_user,
                                     password=db_pass,
-                                    host="localhost", 
-                                    port=3000)
+                                    host=db_host, 
+                                    port=db_port)
         return conn
     except psycopg2.Error as e:
         print("Error while connecting to PostgreSQL", e)
@@ -90,5 +92,4 @@ def main():
             conn.close()
             print("database connection is closed")
 
-# Debugging
 main()
