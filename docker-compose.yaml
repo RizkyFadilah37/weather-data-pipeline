@@ -13,6 +13,11 @@ services:
       - ./postgres/airflow_init.sql:/docker-entrypoint-initdb.d/airflow_init.sql
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${db_user} -d ${db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   
   af:
     container_name: airflow_conn
@@ -36,6 +41,22 @@ services:
       - my_network
     command: >
       bash -c "airflow db migrate && airflow standalone"
+
+  dbt:
+    container_name: dbt_conn
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.latest
+    volumes:
+      - ./dbt/my_dbt_project:/usr/app
+      - ./dbt:/root/.dbt
+    working_dir: /usr/app
+    environment:
+      DBT_PROFILES_DIR: "/root/.dbt"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - my_network
+    command: run
 
 networks:
   my_network:
