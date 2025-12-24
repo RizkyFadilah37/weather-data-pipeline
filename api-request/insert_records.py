@@ -1,4 +1,4 @@
-from api_request import mock_get_api
+from api_request import get_api, base_url
 import psycopg2
 from dotenv import load_dotenv
 import os
@@ -9,6 +9,8 @@ db_user = os.getenv("db_user")
 db = os.getenv("db")
 db_host = os.getenv("db_host", "localhost")
 db_port = os.getenv("db_port", "3000")
+auth_api_weather = os.getenv("auth_api_weather")
+location = os.getenv("location", "Jakarta")  # Default to Jakarta if not set
 
 
 def connect_to_db():
@@ -81,7 +83,7 @@ def insert_data(conn,data):
 def main():
     try:
         conn = connect_to_db()
-        data = mock_get_api()
+        data = get_api(base_url, auth_api_weather, location)
         create_table(conn)
         insert_data(conn,data) 
     except Exception as e:

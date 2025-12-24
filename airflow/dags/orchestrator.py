@@ -18,7 +18,7 @@ default_args = {
 dag = DAG(
     'test_orchestrator',
     default_args=default_args,
-    schedule=timedelta(minutes=1)
+    schedule=timedelta(minutes=5)
 )
 
 with dag:
